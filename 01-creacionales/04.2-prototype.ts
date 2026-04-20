@@ -10,20 +10,22 @@
  * https://refactoring.guru/es/design-patterns/prototype
  */
 
-class Pokemon {
-  name: string;
-  type: string;
-  level: number;
-  attacks: string[];
+import { COLORS } from "../helpers/colors.ts";
 
-  constructor(name: string, type: string, level: number, attacks: string[]) {
-    throw new Error('Method not implemented.');
+class Pokemon {
+
+  constructor(
+    public name: string, 
+    public type: string, 
+    public level: number, 
+    public attacks: string[]
+  ) {
+
   }
 
   // Método para clonar el Pokémon
   clone(): Pokemon {
-    // Los ataques deben de evitar pasarse por referencia, es decir, no deben de ser el mismo arreglo.
-    // Completar: Debe devolver un nuevo Pokémon con los mismos atributos
+    return new Pokemon(this.name, this.type, this.level, [...this.attacks]);
   }
 
   displayInfo(): void {
@@ -41,11 +43,18 @@ class Pokemon {
 // 3. Llamar a displayInfo en cada Pokémon para mostrar sus detalles.
 
 // Ejemplo:
-// const basePokemon = new Pokemon("Charmander", "Fuego", 1, ["Llamarada", "Arañazo"]);
-// const clone1 = basePokemon.clone();
-// clone1.name = "Charmeleon";
-// clone1.level = 16;
-// clone1.attacks.push("Lanzallamas");
+function main() {
+  const basePokemon = new Pokemon("Charmander", "Fuego", 1, ["Llamarada", "Arañazo"]);
+  const clone1 = basePokemon.clone();
+  clone1.name = "Charmeleon";
+  clone1.level = 16;
+  clone1.attacks.push("Lanzallamas");
 
-// basePokemon.displayInfo(); // Aquí no debe de aparecer "Lanzallamas"
-// clone1.displayInfo();
+  console.log('%cCharmander', COLORS.orange);
+  basePokemon.displayInfo(); // Aquí no debe de aparecer "Lanzallamas"
+
+  console.log('%cCharmeleon', COLORS.red);
+  clone1.displayInfo();
+}
+
+main();

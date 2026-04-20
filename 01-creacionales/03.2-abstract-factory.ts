@@ -78,6 +78,7 @@ class ElectricVehicleFactory implements VehicleFactory {
   createVehicle(): Vehicle {
     return new ElectricCar();
   }
+
   createEngine(): Engine {
     return new ElectricEngine();
   }
@@ -87,6 +88,7 @@ class GasVehicleFactory implements VehicleFactory {
   createVehicle(): Vehicle {
     return new GasCar();
   }
+
   createEngine(): Engine {
     return new GasEngine();
   }
