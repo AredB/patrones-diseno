@@ -12,4 +12,5 @@ export const COLORS = {
   orange: 'color: orange',
   pink: 'color: pink',
   violet: 'color: violet',
+  indigo: 'color: indigo',
 };
