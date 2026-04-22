@@ -34,7 +34,7 @@ class MenuItem implements MenuComponent {
 
   showDetails(indent: string = ""): void {
     console.log(
-      `${indent}- ${this.name}: %c$${this.price.toFixed(2)}`,
+      `${indent}- ${this.name}: %c${this.price.toFixed(2)}€`,
       COLORS.green,
     );
   }
@@ -76,6 +76,7 @@ function main() {
   const soda = new MenuItem("Refresco", 2.5);
   const dessert = new MenuItem("Pastel de chocolate", 6.5);
   const coffee = new MenuItem("Café", 1.99);
+  const te = new MenuItem("Té", 0.99);
 
   // Crear categorías de menú y añadir ítems
   const appetizers = new MenuCategory("Entradas");
@@ -86,8 +87,16 @@ function main() {
   mainCourse.add(steak);
 
   const beverages = new MenuCategory("Bebidas");
-  beverages.add(soda);
-  beverages.add(coffee);
+
+  const hotBeverages = new MenuCategory("Calientes");
+  const coldBeverages = new MenuCategory("Frías");
+
+  coldBeverages.add(soda);
+
+  hotBeverages.add(coffee);
+  hotBeverages.add(te);
+
+  beverages.add([coldBeverages, hotBeverages]);
 
   const desserts = new MenuCategory("Postres");
   desserts.add(dessert);
