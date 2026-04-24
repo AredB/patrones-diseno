@@ -8,3 +8,94 @@
  *
  * https://refactoring.guru/es/design-patterns/flyweight
  */
+
+import { COLORS } from "../helpers/colors.ts";
+
+interface Location {
+  display(coordinates: { x: number; y: number }): void;
+}
+
+// Flyweight
+class LocationIcon implements Location {
+  private type: string; // hospital, escuela, parque
+  private iconImg: string; // imagen del marcador
+
+  constructor(type: string, iconImg: string) {
+    this.type = type;
+    this.iconImg = iconImg;
+  }
+
+  display(coordinates: { x: number; y: number }): void {
+    console.log(
+      `Coords: ${this.type} en ${coordinates.x}, ${coordinates.y} con icono %c[${this.iconImg}]`,
+      COLORS.green,
+    );
+  }
+}
+
+// Fábrica de Flyweights
+class LocationFactory {
+  private icons: Record<string, LocationIcon> = {};
+
+  // Escuela, hospital, parque...
+  getLocationIcon(type: string): LocationIcon {
+    if (!this.icons[type]) {
+      console.log(`%cCreando una nueva instancia del icono de ${type}`, COLORS.red);
+
+      const iconImg = `imagen_de_${type.toLowerCase()}.png`;
+      this.icons[type] = new LocationIcon(type, iconImg);
+    }
+
+    return this.icons[type];
+  }
+}
+
+class MapLocation {
+  private coordinates: { x: number; y: number };
+  private icon: LocationIcon;
+
+  constructor(x: number, y: number, icon: LocationIcon) {
+    this.coordinates = { x, y };
+    this.icon = icon;
+  }
+
+  display() {
+    this.icon.display(this.coordinates);
+  }
+}
+
+function main() {
+  const factory = new LocationFactory();
+
+  const locations = [
+    new MapLocation(10, 20, factory.getLocationIcon("Hospital")),
+    new MapLocation(20, 40, factory.getLocationIcon("Hospital")),
+    new MapLocation(30, 60, factory.getLocationIcon("Hospital")),
+
+    new MapLocation(35, 65, factory.getLocationIcon("Parque")),
+    new MapLocation(35, 65, factory.getLocationIcon("Parque")),
+    new MapLocation(35, 65, factory.getLocationIcon("Parque")),
+    new MapLocation(35, 65, factory.getLocationIcon("Parque")),
+    new MapLocation(35, 65, factory.getLocationIcon("Parque")),
+    new MapLocation(35, 65, factory.getLocationIcon("Parque")),
+
+    new MapLocation(30, 60, factory.getLocationIcon("Hospital")),
+    new MapLocation(30, 60, factory.getLocationIcon("Hospital")),
+    new MapLocation(30, 60, factory.getLocationIcon("Hospital")),
+    new MapLocation(30, 60, factory.getLocationIcon("Hospital")),
+    
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+    new MapLocation(30, 60, factory.getLocationIcon("Ecuela")),
+  ];
+
+  locations.forEach((location) => location.display());
+}
+
+main();
