@@ -9,3 +9,94 @@
  *
  * https://refactoring.guru/es/design-patterns/chain-of-responsibility
  */
+
+import { COLORS } from "../helpers/colors.ts";
+
+interface Handler {
+  setNext(handler: Handler): Handler;
+  handle(request: string): void;
+}
+
+abstract class BaseHandler implements Handler {
+  private nextHandler?: Handler;
+
+  setNext(handler: Handler): Handler {
+    this.nextHandler = handler;
+    return handler;
+  }
+  handle(request: string): void {
+    if (this.nextHandler) {
+      this.nextHandler.handle(request);
+    }
+  }
+}
+
+// Soporte básico
+class BasicSupport extends BaseHandler {
+  override handle(request: string): void {
+    if (request === "básico") {
+      console.log(
+        `Soporte básico: %cResolviendo problema básico`,
+        COLORS.green,
+      );
+      return;
+    }
+
+    console.log(
+      `Soporte básico: %cPasando el problema a soporte avanzado`,
+      COLORS.yellow,
+    );
+    super.handle(request);
+  }
+}
+
+class AdvancedSupport extends BaseHandler {
+  override handle(request: string): void {
+    if (request === "avanzado") {
+      console.log(
+        `Soporte avanzado: %cResolviendo problema avanzado`,
+        COLORS.orange,
+      );
+      return;
+    }
+
+    console.log(
+      `Soporte avanzado: %cPasando el problema a soporte experto`,
+      COLORS.purple,
+    );
+    super.handle(request);
+  }
+}
+
+class ExpertSupport extends BaseHandler {
+  override handle(request: string): void {
+    if (request === "experto") {
+      console.log(
+        `Soporte experto: %cResolviendo problema experto`,
+        COLORS.orange,
+      );
+      return;
+    }
+
+    console.log(
+      `%cSoporte avanzado: No hay nada que hacer... bye bye`,
+      COLORS.red,
+    );
+    super.handle(request);
+  }
+}
+
+function main() {
+  const basicSupport = new BasicSupport();
+  const advancedSupport = new AdvancedSupport();
+  const expertSupport = new ExpertSupport();
+
+  basicSupport.setNext(advancedSupport).setNext(expertSupport);
+
+  basicSupport.handle("básico");
+  basicSupport.handle("avanzado");
+  basicSupport.handle("experto");
+  basicSupport.handle("nucelar");
+}
+
+main();
